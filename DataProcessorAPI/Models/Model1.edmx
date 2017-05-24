@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="12.1" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EOPF_AGENCY_DETAILS">
+          <Key>
+            <PropertyRef Name="EAD_ID" />
+          </Key>
+          <Property Name="EAD_ID" Type="number" Precision="38" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EAD_POI_CODE" Type="number" Precision="38" Scale="0" />
+          <Property Name="EAD_CODE" Type="varchar2" MaxLength="20" />
+          <Property Name="EAD_DESCRIPTION" Type="varchar2" MaxLength="255" />
+          <Property Name="EAD_CITY" Type="varchar2" MaxLength="255" />
+          <Property Name="EAD_STATE" Type="varchar2" MaxLength="255" />
+          <Property Name="EAD_EAI_ID" Type="number" Precision="38" Scale="0" />
+        </EntityType>
+        <EntityType Name="EOPF_AGENCY_INFO">
+          <Key>
+            <PropertyRef Name="EAI_ID" />
+          </Key>
+          <Property Name="EAI_ID" Type="number" Precision="38" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EAI_CODE" Type="varchar2" MaxLength="20" />
+          <Property Name="EAI_DESCRIPTION" Type="varchar2" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_MAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="number" Precision="38" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TABLE_NAME" Type="nvarchar2" MaxLength="255" Nullable="false" />
+          <Property Name="DISPLAY_NAME" Type="nvarchar2" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_QUERY">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="number" Precision="9" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QUERY" Type="number" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="nvarchar2" MaxLength="100" />
+          <Property Name="ISACTIVE" Type="number" Precision="1" Scale="0" Nullable="false" />
+          <Property Name="MAPPING_ID" Type="number" Precision="38" Scale="0" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_SETTING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="number" Precision="38" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SERVICE_URL" Type="varchar2" MaxLength="255" Nullable="false" />
+          <Property Name="SERVICE_KEY" Type="varchar2" MaxLength="255" Nullable="false" />
+          <Property Name="SERVICE_USERNAME" Type="varchar2" MaxLength="255" Nullable="false" />
+          <Property Name="SERVICE_PASSWORD" Type="varchar2" MaxLength="255" Nullable="false" />
+          <Property Name="LOG_PATH" Type="varchar2" MaxLength="255" />
+          <Property Name="ENVIRONMENT" Type="varchar2" MaxLength="10" />
+          <Property Name="ISACTIVE" Type="number" Precision="1" Scale="0" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_SUB_MAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="number" Precision="38" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TABLE_NAME" Type="nvarchar2" MaxLength="255" Nullable="false" />
+          <Property Name="PARENT" Type="number" Precision="38" Scale="0" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AGENCY_DETAILS">
+          <End Role="EOPF_AGENCY_INFO" Type="Self.EOPF_AGENCY_INFO" Multiplicity="0..1" />
+          <End Role="EOPF_AGENCY_DETAILS" Type="Self.EOPF_AGENCY_DETAILS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EOPF_AGENCY_INFO">
+              <PropertyRef Name="EAI_ID" />
+            </Principal>
+            <Dependent Role="EOPF_AGENCY_DETAILS">
+              <PropertyRef Name="EAD_EAI_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DP_SUB_MAPPING">
+          <End Role="EOPF_DP_MAPPING" Type="Self.EOPF_DP_MAPPING" Multiplicity="1" />
+          <End Role="EOPF_DP_SUB_MAPPING" Type="Self.EOPF_DP_SUB_MAPPING" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EOPF_DP_MAPPING">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EOPF_DP_SUB_MAPPING">
+              <PropertyRef Name="PARENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EOPF_QUERY_MAPPING">
+          <End Role="EOPF_DP_MAPPING" Type="Self.EOPF_DP_MAPPING" Multiplicity="0..1" />
+          <End Role="EOPF_DP_QUERY" Type="Self.EOPF_DP_QUERY" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EOPF_DP_MAPPING">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EOPF_DP_QUERY">
+              <PropertyRef Name="MAPPING_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="EOPF_AGENCY_DETAILS" EntityType="Self.EOPF_AGENCY_DETAILS" Schema="EOPF_QA504_CORE" store:Type="Tables" />
+          <EntitySet Name="EOPF_AGENCY_INFO" EntityType="Self.EOPF_AGENCY_INFO" Schema="EOPF_QA504_CORE" store:Type="Tables" />
+          <EntitySet Name="EOPF_DP_MAPPING" EntityType="Self.EOPF_DP_MAPPING" Schema="EOPF_QA504_CORE" store:Type="Tables" />
+          <EntitySet Name="EOPF_DP_QUERY" EntityType="Self.EOPF_DP_QUERY" Schema="EOPF_QA504_CORE" store:Type="Tables" />
+          <EntitySet Name="EOPF_DP_SETTING" EntityType="Self.EOPF_DP_SETTING" Schema="EOPF_QA504_CORE" store:Type="Tables" />
+          <EntitySet Name="EOPF_DP_SUB_MAPPING" EntityType="Self.EOPF_DP_SUB_MAPPING" Schema="EOPF_QA504_CORE" store:Type="Tables" />
+          <AssociationSet Name="FK_AGENCY_DETAILS" Association="Self.FK_AGENCY_DETAILS">
+            <End Role="EOPF_AGENCY_INFO" EntitySet="EOPF_AGENCY_INFO" />
+            <End Role="EOPF_AGENCY_DETAILS" EntitySet="EOPF_AGENCY_DETAILS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DP_SUB_MAPPING" Association="Self.FK_DP_SUB_MAPPING">
+            <End Role="EOPF_DP_MAPPING" EntitySet="EOPF_DP_MAPPING" />
+            <End Role="EOPF_DP_SUB_MAPPING" EntitySet="EOPF_DP_SUB_MAPPING" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EOPF_QUERY_MAPPING" Association="Self.FK_EOPF_QUERY_MAPPING">
+            <End Role="EOPF_DP_MAPPING" EntitySet="EOPF_DP_MAPPING" />
+            <End Role="EOPF_DP_QUERY" EntitySet="EOPF_DP_QUERY" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EOPF_AGENCY_DETAILS">
+          <Key>
+            <PropertyRef Name="EAD_ID" />
+          </Key>
+          <Property Name="EAD_ID" Type="Decimal" Precision="38" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EAD_POI_CODE" Type="Decimal" Precision="38" Scale="0" />
+          <Property Name="EAD_CODE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EAD_DESCRIPTION" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EAD_CITY" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EAD_STATE" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EAD_EAI_ID" Type="Decimal" Precision="38" Scale="0" />
+          <NavigationProperty Name="EOPF_AGENCY_INFO" Relationship="Self.FK_AGENCY_DETAILS" FromRole="EOPF_AGENCY_DETAILS" ToRole="EOPF_AGENCY_INFO" />
+        </EntityType>
+        <EntityType Name="EOPF_AGENCY_INFO">
+          <Key>
+            <PropertyRef Name="EAI_ID" />
+          </Key>
+          <Property Name="EAI_ID" Type="Decimal" Precision="38" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EAI_CODE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EAI_DESCRIPTION" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EOPF_AGENCY_DETAILS" Relationship="Self.FK_AGENCY_DETAILS" FromRole="EOPF_AGENCY_INFO" ToRole="EOPF_AGENCY_DETAILS" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_MAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Precision="38" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TABLE_NAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DISPLAY_NAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="EOPF_DP_SUB_MAPPING" Relationship="Self.FK_DP_SUB_MAPPING" FromRole="EOPF_DP_MAPPING" ToRole="EOPF_DP_SUB_MAPPING" />
+          <NavigationProperty Name="EOPF_DP_QUERY" Relationship="Self.FK_EOPF_QUERY_MAPPING" FromRole="EOPF_DP_MAPPING" ToRole="EOPF_DP_QUERY" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_QUERY">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QUERY" Type="Int32" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ISACTIVE" Type="Boolean" Nullable="false" />
+          <Property Name="MAPPING_ID" Type="Decimal" Precision="38" Scale="0" />
+          <NavigationProperty Name="EOPF_DP_MAPPING" Relationship="Self.FK_EOPF_QUERY_MAPPING" FromRole="EOPF_DP_QUERY" ToRole="EOPF_DP_MAPPING" />
+        </EntityType>
+        <EntityType Name="EOPF_DP_SUB_MAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Precision="38" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TABLE_NAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PARENT" Type="Decimal" Precision="38" Scale="0" Nullable="false" />
+          <NavigationProperty Name="EOPF_DP_MAPPING" Relationship="Self.FK_DP_SUB_MAPPING" FromRole="EOPF_DP_SUB_MAPPING" ToRole="EOPF_DP_MAPPING" />
+        </EntityType>
+        <Association Name="FK_AGENCY_DETAILS">
+          <End Role="EOPF_AGENCY_INFO" Type="Self.EOPF_AGENCY_INFO" Multiplicity="0..1" />
+          <End Role="EOPF_AGENCY_DETAILS" Type="Self.EOPF_AGENCY_DETAILS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EOPF_AGENCY_INFO">
+              <PropertyRef Name="EAI_ID" />
+            </Principal>
+            <Dependent Role="EOPF_AGENCY_DETAILS">
+              <PropertyRef Name="EAD_EAI_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DP_SUB_MAPPING">
+          <End Role="EOPF_DP_MAPPING" Type="Self.EOPF_DP_MAPPING" Multiplicity="1" />
+          <End Role="EOPF_DP_SUB_MAPPING" Type="Self.EOPF_DP_SUB_MAPPING" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EOPF_DP_MAPPING">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EOPF_DP_SUB_MAPPING">
+              <PropertyRef Name="PARENT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EOPF_QUERY_MAPPING">
+          <End Role="EOPF_DP_MAPPING" Type="Self.EOPF_DP_MAPPING" Multiplicity="0..1" />
+          <End Role="EOPF_DP_QUERY" Type="Self.EOPF_DP_QUERY" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EOPF_DP_MAPPING">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EOPF_DP_QUERY">
+              <PropertyRef Name="MAPPING_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EOPF_AGENCY_DETAILS" EntityType="Self.EOPF_AGENCY_DETAILS" />
+          <EntitySet Name="EOPF_AGENCY_INFO" EntityType="Self.EOPF_AGENCY_INFO" />
+          <EntitySet Name="EOPF_DP_MAPPING" EntityType="Self.EOPF_DP_MAPPING" />
+          <EntitySet Name="EOPF_DP_QUERY" EntityType="Self.EOPF_DP_QUERY" />
+          <EntitySet Name="EOPF_DP_SUB_MAPPING" EntityType="Self.EOPF_DP_SUB_MAPPING" />
+          <AssociationSet Name="FK_AGENCY_DETAILS" Association="Self.FK_AGENCY_DETAILS">
+            <End Role="EOPF_AGENCY_INFO" EntitySet="EOPF_AGENCY_INFO" />
+            <End Role="EOPF_AGENCY_DETAILS" EntitySet="EOPF_AGENCY_DETAILS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DP_SUB_MAPPING" Association="Self.FK_DP_SUB_MAPPING">
+            <End Role="EOPF_DP_MAPPING" EntitySet="EOPF_DP_MAPPING" />
+            <End Role="EOPF_DP_SUB_MAPPING" EntitySet="EOPF_DP_SUB_MAPPING" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EOPF_QUERY_MAPPING" Association="Self.FK_EOPF_QUERY_MAPPING">
+            <End Role="EOPF_DP_MAPPING" EntitySet="EOPF_DP_MAPPING" />
+            <End Role="EOPF_DP_QUERY" EntitySet="EOPF_DP_QUERY" />
+          </AssociationSet>
+          <EntitySet Name="EOPF_DP_SETTING" EntityType="Model.EOPF_DP_SETTING" />
+        </EntityContainer>
+        <EntityType Name="EOPF_DP_SETTING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" Precision="38" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SERVICE_URL" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SERVICE_KEY" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SERVICE_USERNAME" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="SERVICE_PASSWORD" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LOG_PATH" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ENVIRONMENT" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ISACTIVE" Type="Boolean" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="EOPF_AGENCY_DETAILS">
+            <EntityTypeMapping TypeName="Model.EOPF_AGENCY_DETAILS">
+              <MappingFragment StoreEntitySet="EOPF_AGENCY_DETAILS">
+                <ScalarProperty Name="EAD_ID" ColumnName="EAD_ID" />
+                <ScalarProperty Name="EAD_POI_CODE" ColumnName="EAD_POI_CODE" />
+                <ScalarProperty Name="EAD_CODE" ColumnName="EAD_CODE" />
+                <ScalarProperty Name="EAD_DESCRIPTION" ColumnName="EAD_DESCRIPTION" />
+                <ScalarProperty Name="EAD_CITY" ColumnName="EAD_CITY" />
+                <ScalarProperty Name="EAD_STATE" ColumnName="EAD_STATE" />
+                <ScalarProperty Name="EAD_EAI_ID" ColumnName="EAD_EAI_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EOPF_AGENCY_INFO">
+            <EntityTypeMapping TypeName="Model.EOPF_AGENCY_INFO">
+              <MappingFragment StoreEntitySet="EOPF_AGENCY_INFO">
+                <ScalarProperty Name="EAI_ID" ColumnName="EAI_ID" />
+                <ScalarProperty Name="EAI_CODE" ColumnName="EAI_CODE" />
+                <ScalarProperty Name="EAI_DESCRIPTION" ColumnName="EAI_DESCRIPTION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EOPF_DP_MAPPING">
+            <EntityTypeMapping TypeName="Model.EOPF_DP_MAPPING">
+              <MappingFragment StoreEntitySet="EOPF_DP_MAPPING">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TABLE_NAME" ColumnName="TABLE_NAME" />
+                <ScalarProperty Name="DISPLAY_NAME" ColumnName="DISPLAY_NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EOPF_DP_QUERY">
+            <EntityTypeMapping TypeName="Model.EOPF_DP_QUERY">
+              <MappingFragment StoreEntitySet="EOPF_DP_QUERY">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="QUERY" ColumnName="QUERY" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="ISACTIVE" ColumnName="ISACTIVE" />
+                <ScalarProperty Name="MAPPING_ID" ColumnName="MAPPING_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EOPF_DP_SUB_MAPPING">
+            <EntityTypeMapping TypeName="Model.EOPF_DP_SUB_MAPPING">
+              <MappingFragment StoreEntitySet="EOPF_DP_SUB_MAPPING">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TABLE_NAME" ColumnName="TABLE_NAME" />
+                <ScalarProperty Name="PARENT" ColumnName="PARENT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EOPF_DP_SETTING">
+            <EntityTypeMapping TypeName="Model.EOPF_DP_SETTING">
+              <MappingFragment StoreEntitySet="EOPF_DP_SETTING">
+                <ScalarProperty Name="ISACTIVE" ColumnName="ISACTIVE" />
+                <ScalarProperty Name="ENVIRONMENT" ColumnName="ENVIRONMENT" />
+                <ScalarProperty Name="LOG_PATH" ColumnName="LOG_PATH" />
+                <ScalarProperty Name="SERVICE_PASSWORD" ColumnName="SERVICE_PASSWORD" />
+                <ScalarProperty Name="SERVICE_USERNAME" ColumnName="SERVICE_USERNAME" />
+                <ScalarProperty Name="SERVICE_KEY" ColumnName="SERVICE_KEY" />
+                <ScalarProperty Name="SERVICE_URL" ColumnName="SERVICE_URL" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bdec9b9ebd86491fb9c75e3eb1711764" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.EOPF_AGENCY_DETAILS" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.EOPF_AGENCY_INFO" Width="1.5" PointX="5.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.EOPF_DP_MAPPING" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.EOPF_DP_QUERY" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.EOPF_DP_SUB_MAPPING" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_AGENCY_DETAILS" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_DP_SUB_MAPPING" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_EOPF_QUERY_MAPPING" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.EOPF_DP_SETTING" Width="1.5" PointX="5.375" PointY="4.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
